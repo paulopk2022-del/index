@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catalogador de Cores</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    gap:30px;
+    padding:20px;
+    background:#181818;
+}
+
+.painel{
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+.grid{
+    display:grid;
+    grid-template-columns: repeat(12, 45px);
+    gap:4px;
+}
+
+.bloco{
+    width:45px;
+    height:45px;
+    border:1px solid #999;
+    background:white;
+    cursor:pointer;
+}
+
+.verde{
+    background:#00c853;
+}
+
+.vermelho{
+    background:#d50000;
+}
+</style>
+</head>
+
+<body>
+
+<div class="painel">
+    <div class="grid" id="grid"></div>
+</div>
+
+<div class="painel">
+    <h2>Contagem</h2>
+    <p>🟢: <span id="verdes">0</span></p>
+    <p>🔴: <span id="vermelhos">0</span></p>
+
+    <button onclick="resetar()">Resetar Tudo</button>
+</div>
+
+<script>
+
+const grid = document.getElementById('grid');
+
+for(let i = 0; i < 24; i++){
+
+    const bloco = document.createElement('div');
+    bloco.classList.add('bloco');
+
+    bloco.dataset.estado = 0;
+
+    bloco.addEventListener('click', () => {
+
+        let estado = parseInt(bloco.dataset.estado);
+
+        estado++;
+
+        if(estado > 2){
+            estado = 0;
+        }
+
+        bloco.dataset.estado = estado;
+
+        bloco.classList.remove('verde');
+        bloco.classList.remove('vermelho');
+
+        if(estado === 1){
+            bloco.classList.add('verde');
+        }
+
+        if(estado === 2){
+            bloco.classList.add('vermelho');
+        }
+
+        atualizarContagem();
+    });
+
+    grid.appendChild(bloco);
+}
+
+function atualizarContagem(){
+
+    let verdes = 0;
+    let vermelhos = 0;
+
+    document.querySelectorAll('.bloco').forEach(bloco => {
+
+        const estado = parseInt(bloco.dataset.estado);
+
+        if(estado === 1) verdes++;
+        if(estado === 2) vermelhos++;
+
+    });
+
+    document.getElementById('verdes').textContent = verdes;
+    document.getElementById('vermelhos').textContent = vermelhos;
+}
+
+function resetar(){
+
+    document.querySelectorAll('.bloco').forEach(bloco => {
+
+        bloco.dataset.estado = 0;
+        bloco.classList.remove('verde');
+        bloco.classList.remove('vermelho');
+
+    });
+
+    atualizarContagem();
+}
+
+</script>
+
+</body>
+</html>
